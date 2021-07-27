@@ -6,6 +6,7 @@ import { CustomInputComponent } from './components/customInput/customInput.compo
 import { FormsModule } from '@angular/forms';
 import { CustomOptionComponent } from './components/customOption/customOption.component';
 import { AutoCompleteComponent } from './components/autocomplete/autocomplete.component';
+import { MovieService } from './movie.service';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,7 @@ import { AutoCompleteComponent } from './components/autocomplete/autocomplete.co
     BrowserModule,
     FormsModule
   ],
-  providers: [],
+  providers: [MovieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

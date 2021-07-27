@@ -1,19 +1,11 @@
 <div class="app-container">
   <div class="movie-search-container">
     <app-autocomplete 
-    [options]="movieNames" 
+    [options]="filteredMovieOptions" 
     [debounceTime]="debounceTimeThreshold"
     (onSearchTextChange)="handleSearchTextChange($event)"
     (onOptionAction)="handleOptionAction($event)"
     (onOptionSelection)="handleOptionSelection($event)"></app-autocomplete>
   </div>
   
-  <!-- <app-input [value]="searchText" (onValueChange)="handleSearchTextChange($event)"></app-input>
-  <app-option
-    [label]="'Batman'"
-    [selected]="false"
-    [focused]="true"
-    [actionText]=""
-    (onAction)="handleOptionAction()"
-    (onSelection)="handleOptionSelection()"></app-option> -->
 </div>

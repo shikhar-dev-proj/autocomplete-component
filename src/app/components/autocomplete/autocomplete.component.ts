@@ -1,6 +1,11 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, HostListener, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { Subject } from 'rxjs';
-import { debounceTime, takeUntil, tap } from 'rxjs/operators';
+import { debounceTime, takeUntil } from 'rxjs/operators';
+
+export interface Option {
+  label: string;
+  selected: boolean;
+}
 
 @Component({
   selector: 'app-autocomplete',
@@ -9,28 +14,28 @@ import { debounceTime, takeUntil, tap } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AutoCompleteComponent implements OnInit, OnChanges {
-  @Input() options: string[];
+  @Input() options: Option[];
   @Input() debounceTime: number = 400;
   @Output() onSearchTextChange = new EventEmitter<string>();
   @Output() onOptionAction = new EventEmitter<string>();
-  @Output() onOptionSelection = new EventEmitter<string>();
+  @Output() onOptionSelection = new EventEmitter<Option[]>();
 
   searchText = '';
   searchTextSub$ = new Subject<string>();
   unsubscribe$ = new Subject<void>();
-  selectedOption: string;
-  focusedOption: string;
+  selectedOptions: Option[] = [];
+  focusedOption: { option: Option, index: number };
   loading = false;
   collapseOptionPanel = false;
 
   ngOnInit() {
     this.searchTextSub$.pipe(
       debounceTime(this.debounceTime),
-      // tap(() => { this.loading = true; }),
       takeUntil(this.unsubscribe$)
     ).subscribe(() => {
       this.onSearchTextChange.emit(this.searchText);
     });
+
   }
 
   ngOnChanges() {
@@ -39,19 +44,55 @@ export class AutoCompleteComponent implements OnInit, OnChanges {
     }
   }
 
-  handleOptionAction(option: string) {
-    this.onOptionAction.emit(option);
+  @HostListener('document:mouseover', ['$event'])
+  mouseover(event) {
+    if (event.target.classList.contains('option-container')) {
+      const optionId = event.target.id;
+      const index = +optionId.slice(7); // trim option- and convert to string
+      this.focusOptionAtIndex(index);
+    }
   }
 
-  handleOptionSelection(option: string) {
-    this.onOptionSelection.emit(option);
+  @HostListener('window:keyup', ['$event'])
+  keyboardEvent(event: KeyboardEvent) {
+    if (event.code === 'ArrowUp') {
+      if (!!this.focusedOption) {
+        this.focusOptionAtIndex(this.focusedOption.index - 1);
+      }
+    }
+    if (event.code === 'ArrowDown') {
+      if (!this.focusedOption) {
+        this.focusOptionAtIndex(0);
+      } else {
+        this.focusOptionAtIndex(this.focusedOption.index + 1);
+      }
+    }
+    if (event.code === 'Enter') {
+      this.handleOptionSelection(this.focusedOption.option);
+    }
+  }
+
+  handleOptionAction(option: Option) {
+    option.selected = false;
+    this.selectedOptions = this.selectedOptions.filter(o => o.label !== option.label);
+  }
+
+  handleOptionSelection(option: Option) {
+    if (!this.selectedOptions.find(o => o.label === option.label)) {
+      this.selectedOptions.push(option);
+      option.selected = true;
+      this.onOptionSelection.emit(this.selectedOptions);
+    }
+  }
+
+  focusOptionAtIndex(index: number) {
+    this.focusedOption = { option: this.options[index], index };
   }
 
   handlSearchTextChange(searchText: string) {
     this.searchText = searchText;
     if (!!searchText) {
       this.loading = true;
-      console.log('search ... : ', this.searchText);
       this.searchTextSub$.next(this.searchText);
     }
   }

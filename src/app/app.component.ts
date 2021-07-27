@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { movieOptions } from './app.constants';
+import { Option } from './components/autocomplete/autocomplete.component';
+import { MovieService } from './movie.service';
 
 @Component({
   selector: 'app-root',
@@ -7,21 +9,25 @@ import { movieOptions } from './app.constants';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+
   title = 'dummyApp';
   searchText = '';
   debounceTimeThreshold = 400;
-  movieNames = movieOptions.map(m => m.name);
-  
+  allMovieOptions = [];
+  selectedMovies = [];
+  filteredMovieOptions = [];
 
-  handleOptionAction() {
-
+  constructor(public movieService: MovieService) {
+    this.allMovieOptions = movieOptions.map(m => ({ label: m.name, selected: false }));
+    this.filteredMovieOptions = [...this.allMovieOptions];
   }
 
-  handleOptionSelection() {
-
+  handleOptionSelection(options: Option[]) {
+    this.selectedMovies = options;
   }
 
   handleSearchTextChange(searchText: string) {
-    this.movieNames = movieOptions.map(m => m.name).filter(n => n.includes(searchText));
+    console.log('FETCH MOVIES FOR ... : ', searchText);
+    this.filteredMovieOptions = this.allMovieOptions.filter(n => n.label.includes(searchText));
   }
 }

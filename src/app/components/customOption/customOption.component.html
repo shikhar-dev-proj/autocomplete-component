@@ -1,5 +1,5 @@
-<div class="option-container" [ngClass]="{ focusedOption: focused }" (click)="onSelectionChange()">
-    <div class="option-label">{{label}}</div>
+<div class="option-container" id="option-{{index}}" (click)="onSelectionChange()">
+    <div class="option-label" [ngClass]="{ focusedOption: focused, selectedOption: selected }">{{label}}</div>
     <ng-container *ngIf="actionText">
         <div class="option-action" (click)="onActionClick($event)">{{actionText}}</div>
     </ng-container>

@@ -8,6 +8,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 })
 export class CustomOptionComponent {
   @Input() label: string;
+  @Input() index: number;
   @Input() selected: boolean;
   @Input() focused: boolean;
   @Input() actionText: string;
@@ -16,13 +17,11 @@ export class CustomOptionComponent {
 
 
   onActionClick(event: Event) {
-    console.log('action clicked');
     event.stopPropagation();
     this.onAction.emit();
   }
 
   onSelectionChange() {
-    console.log('selection change');
     this.onSelection.emit();
   }
 }

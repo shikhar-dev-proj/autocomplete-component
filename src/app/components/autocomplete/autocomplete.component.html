@@ -2,14 +2,29 @@
     <app-input [value]="searchText" (onValueChange)="handlSearchTextChange($event)"></app-input>
     <div class="options-container">
         <ng-container *ngIf="options?.length && !loading && searchText">
-            <ng-container *ngFor="let option of options">
+            <ng-container *ngFor="let option of selectedOptions;let i=index">
                 <app-option
-                    [label]="option"
-                    [selected]="selectedOption === option"
-                    [focused]="focusedOption === option"
-                    [actionText]="'Remove'"
+                    class="app-option"
+                    [index]="i"
+                    [label]="option.label"
+                    [selected]="option.selected"
+                    [focused]="focusedOption?.option.label === option.label"
+                    [actionText]="option.selected ? 'Remove' : ''"
                     (onAction)="handleOptionAction(option)"
                     (onSelection)="handleOptionSelection(option)"></app-option>
+            </ng-container>
+            <ng-container *ngFor="let option of options;let i=index">
+                <ng-container *ngIf="!option.selected">
+                    <app-option
+                    class="app-option"
+                    [index]="i"
+                    [label]="option.label"
+                    [selected]="option.selected"
+                    [focused]="focusedOption?.option.label === option.label"
+                    [actionText]="option.selected ? 'Remove' : ''"
+                    (onAction)="handleOptionAction(option)"
+                    (onSelection)="handleOptionSelection(option)"></app-option>
+                </ng-container>
             </ng-container>
         </ng-container>
         <ng-container *ngIf="options?.length && loading && searchText">

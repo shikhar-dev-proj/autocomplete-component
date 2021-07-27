@@ -9,13 +9,19 @@
     font-size: 1rem;
     color: black;
   }
+  .focusedOption {
+    background-color: #f8f9fa;
+    color: blueviolet !important;
+    font-weight: bold;
+  }
+  .selectedOption {
+    color: blue;
+    font-weight: bold;
+  }
   .option-action {
     font-size: 0.7rem;
     color: red;
     display: grid;
     padding-top: 0.2rem;    
   }
-}
-.focusedOption {
-  background-color: #f8f9fa;
 }

@@ -11,7 +11,6 @@ export class CustomInputComponent  {
   @Output() onValueChange = new EventEmitter<string>();
 
   onTextChange(str: string) {
-    console.log('text change');
     this.onValueChange.emit(str);
   }
 }
