@@ -1,0 +1,23 @@
+<div class="autocomplete-container">
+    <app-input [value]="searchText" (onValueChange)="handlSearchTextChange($event)"></app-input>
+    <div class="options-container">
+        <ng-container *ngIf="options?.length && !loading && searchText">
+            <ng-container *ngFor="let option of options">
+                <app-option
+                    [label]="option"
+                    [selected]="selectedOption === option"
+                    [focused]="focusedOption === option"
+                    [actionText]="'Remove'"
+                    (onAction)="handleOptionAction(option)"
+                    (onSelection)="handleOptionSelection(option)"></app-option>
+            </ng-container>
+        </ng-container>
+        <ng-container *ngIf="options?.length && loading && searchText">
+            Loading...
+        </ng-container>
+        <ng-container *ngIf="!loading && searchText && !options?.length">
+            No Results Found.
+        </ng-container>
+        
+    </div>
+</div>

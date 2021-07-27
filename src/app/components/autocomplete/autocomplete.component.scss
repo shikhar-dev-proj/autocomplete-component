@@ -1,0 +1,11 @@
+.autocomplete-container {
+    width: 100%;
+    background-color: #f8f9fa;
+    border-radius: 1rem;
+    padding: 1rem;
+    .options-container {
+        max-height: 30rem;
+        overflow-y: scroll;
+        padding: 0.5rem;
+    }
+}
