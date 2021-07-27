@@ -8,7 +8,7 @@
                     [index]="i"
                     [label]="option.label"
                     [selected]="option.selected"
-                    [focused]="focusedOption?.option.label === option.label"
+                    [focused]="false"
                     [actionText]="option.selected ? 'Remove' : ''"
                     (onAction)="handleOptionAction(option)"
                     (onSelection)="handleOptionSelection(option)"></app-option>
@@ -20,7 +20,7 @@
                     [index]="i"
                     [label]="option.label"
                     [selected]="option.selected"
-                    [focused]="focusedOption?.option.label === option.label"
+                    [focused]="focusedOption?.option?.label === option.label"
                     [actionText]="option.selected ? 'Remove' : ''"
                     (onAction)="handleOptionAction(option)"
                     (onSelection)="handleOptionSelection(option)"></app-option>
